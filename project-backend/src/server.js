@@ -1,63 +1,28 @@
 import express from 'express';
 import cors from 'cors';
-import pino from 'pino-http';
-// import dotenv from 'dotenv';
-// dotenv.config();
-// import 'dotenv/config';
-// const port = Number(process.env.PORT);
-// console.log(process.env.PORT);
-
 import { env } from './utils/env.js';
-import * as contactServices from './services/contacts.js';
+import contactsRouter from './routers/contacts.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import { errorHandler } from './middlewares/errorHandler.js';
+import { logger } from './middlewares/logger.js';
 
 export const startServer = () => {
+  // ---- Creating Web-Server ---- //
+
   const app = express();
+
+  // app.use(logger);
+
+  // ---- Creating Middleware ---- //
+
   app.use(cors());
-  const logger = pino({
-    transport: {
-      target: 'pino-pretty',
-    },
-  });
-  //   app.use(logger);
 
-  app.get('/contacts', async (req, res) => {
-    const data = await contactServices.getContacts();
+  // Якщо прийде будь-який запит, що починається з /contacts, шукай обробник цього запиту у об'єкті contactsRouter
+  app.use('/contacts', contactsRouter);
 
-    res.json({
-      status: 200,
-      message: 'Contacts successfully found',
-      data,
-    });
-  });
+  app.use(notFoundHandler); // when address is not found, should be placed right after routes
 
-  app.get('/contacts/:id', async (req, res) => {
-    const { id } = req.params;
-    const data = await contactServices.getContactById(id);
-
-    if (!data) {
-      return res.status(404).json({
-        message: `Contact with id=${id} not found`,
-      });
-    }
-
-    res.json({
-      status: 200,
-      message: 'Contact successfully found',
-      data,
-    });
-  });
-
-  app.use((req, res) => {
-    res.status(404).json({
-      message: `${req.url} not found`,
-    });
-  });
-
-  app.use((error, req, res, next) => {
-    res.status(505).json({
-      message: error.message,
-    });
-  });
+  app.use(errorHandler); // when error occured
 
   const port = Number(env('PORT', 300));
 
