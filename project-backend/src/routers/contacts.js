@@ -13,6 +13,8 @@ contactsRouter.get(
   ctrlWrapper(contactsControllers.getContactByIdController),
 );
 
+contactsRouter.post('/', ctrlWrapper(contactsControllers.addContactController));
+
 //contactsRouter.get('/:id', async(req, res, next => {
 // try {
 // await contactsControllers.getContactByIdController(req, res, next);

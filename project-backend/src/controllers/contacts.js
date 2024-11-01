@@ -34,3 +34,5 @@ export const getContactByIdController = async (req, res) => {
     data,
   });
 };
+
+export const addContactController = async (req, res) => {};
