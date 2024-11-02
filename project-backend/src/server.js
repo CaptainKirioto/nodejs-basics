@@ -16,6 +16,7 @@ export const startServer = () => {
   // ---- Creating Middleware ---- //
 
   app.use(cors());
+  app.use(express.json());
 
   // Якщо прийде будь-який запит, що починається з /contacts, шукай обробник цього запиту у об'єкті contactsRouter
   app.use('/contacts', contactsRouter);

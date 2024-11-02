@@ -13,13 +13,28 @@ contactsRouter.get(
   ctrlWrapper(contactsControllers.getContactByIdController),
 );
 
-contactsRouter.post('/', ctrlWrapper(contactsControllers.addContactController));
-
 //contactsRouter.get('/:id', async(req, res, next => {
 // try {
 // await contactsControllers.getContactByIdController(req, res, next);
 // } catch (error) {
 // next(error)}
 // });
+
+contactsRouter.post('/', ctrlWrapper(contactsControllers.addContactController));
+
+contactsRouter.put(
+  '/:id',
+  ctrlWrapper(contactsControllers.upsertContactController),
+);
+
+contactsRouter.patch(
+  '/:id',
+  ctrlWrapper(contactsControllers.patchContactController),
+);
+
+contactsRouter.delete(
+  '/:id',
+  ctrlWrapper(contactsControllers.deleteContactController),
+);
 
 export default contactsRouter;

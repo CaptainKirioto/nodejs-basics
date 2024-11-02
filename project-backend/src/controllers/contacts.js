@@ -35,4 +35,57 @@ export const getContactByIdController = async (req, res) => {
   });
 };
 
-export const addContactController = async (req, res) => {};
+export const addContactController = async (req, res) => {
+  const data = await contactServices.addContact(req.body);
+
+  res.status(201).json({
+    status: 201,
+    message: 'Contact successfully added',
+    data,
+  });
+};
+
+export const upsertContactController = async (req, res) => {
+  const { id: _id } = req.params;
+  const data = await contactServices.updateContact({
+    _id,
+    payload: req.body,
+    options: { upsert: true },
+  });
+
+  const status = data.isNew ? 201 : 200;
+
+  res.status(status).json({
+    status,
+    message: 'Contact upserted successfully',
+    data,
+  });
+};
+
+export const patchContactController = async (req, res) => {
+  const { id: _id } = req.params;
+
+  const data = await contactServices.updateContact({ _id, payload: req.body });
+
+  if (!data) {
+    throw createHttpError(404, `Contact with id=${_id} not found`);
+  }
+
+  res.json({
+    status: 200,
+    message: 'Movie patched successfully',
+    data,
+  });
+};
+
+export const deleteContactController = async (req, res) => {
+  const { id: _id } = req.params;
+
+  const data = await contactServices.deleteContact({ _id });
+
+  if (!data) {
+    throw createHttpError(404, `Contact with id=${_id} not found`);
+  }
+
+  res.status(204).send();
+};
