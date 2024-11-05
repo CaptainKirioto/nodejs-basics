@@ -1,4 +1,7 @@
 import { Schema, model } from 'mongoose';
+import { genderList } from '../../constants/contacts.js';
+import { handleSaveError } from './hooks.js';
+import { setUpdateSettings } from './hooks.js';
 
 const contactSchema = new Schema(
   {
@@ -8,7 +11,7 @@ const contactSchema = new Schema(
     },
     phone: {
       type: String,
-      required: true,
+      required: false,
     },
     email: {
       type: String,
@@ -20,12 +23,18 @@ const contactSchema = new Schema(
     },
     gender: {
       type: String,
-      enum: ['f', 'm'],
+      enum: genderList,
       required: true,
     },
   },
   { versionKey: false, timestamps: true },
 );
+
+contactSchema.post('save', handleSaveError);
+
+contactSchema.pre('findOneAndUpdate', setUpdateSettings);
+
+contactSchema.post('findOneAndUpdate', handleSaveError);
 
 const ContactCollection = model('contact', contactSchema);
 
