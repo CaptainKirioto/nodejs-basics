@@ -17,7 +17,7 @@ export const contactsAddSchema = Joi.object({
 
 export const contactsUpdateSchema = Joi.object({
   name: Joi.string(),
-  phone: Joi.string(),
+  phone: Joi.string().min(8).max(16),
   email: Joi.string(),
   job: Joi.string(),
   gender: Joi.string().valid(...genderList),

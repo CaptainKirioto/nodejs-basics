@@ -12,6 +12,9 @@ const contactSchema = new Schema(
     phone: {
       type: String,
       required: false,
+      // mongoose validation
+      // minLength: 8,
+      // maxLength: 16,
     },
     email: {
       type: String,
