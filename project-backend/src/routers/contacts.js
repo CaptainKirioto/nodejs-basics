@@ -57,10 +57,9 @@ contactsRouter.put(
 contactsRouter.patch(
   '/:id',
   isValidId,
-
+  validateBody(contactsUpdateSchema),
   ctrlWrapper(contactsControllers.patchContactController),
 );
-// validateBody(contactsUpdateSchema),
 
 contactsRouter.delete(
   '/:id',
