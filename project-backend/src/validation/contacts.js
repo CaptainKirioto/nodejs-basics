@@ -13,6 +13,7 @@ export const contactsAddSchema = Joi.object({
     'any.required': 'Write the job, please',
   }),
   gender: Joi.string().valid(...genderList),
+  birthYear: Joi.number().min(1700).required(),
 });
 
 export const contactsUpdateSchema = Joi.object({
@@ -21,4 +22,5 @@ export const contactsUpdateSchema = Joi.object({
   email: Joi.string(),
   job: Joi.string(),
   gender: Joi.string().valid(...genderList),
+  birthYear: Joi.number().min(1700),
 });

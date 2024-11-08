@@ -29,6 +29,11 @@ const contactSchema = new Schema(
       enum: genderList,
       required: true,
     },
+    birthYear: {
+      type: Number,
+      min: 1700,
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true },
 );
@@ -38,6 +43,8 @@ contactSchema.post('save', handleSaveError);
 contactSchema.pre('findOneAndUpdate', setUpdateSettings);
 
 contactSchema.post('findOneAndUpdate', handleSaveError);
+
+export const sortByList = ['name', 'email', 'job'];
 
 const ContactCollection = model('contact', contactSchema);
 
