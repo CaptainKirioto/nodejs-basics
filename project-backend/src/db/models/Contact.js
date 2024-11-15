@@ -1,7 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { genderList } from '../../constants/contacts.js';
-import { handleSaveError } from './hooks.js';
-import { setUpdateSettings } from './hooks.js';
+import { handleSaveError, setUpdateSettings } from './hooks.js';
 
 const contactSchema = new Schema(
   {
