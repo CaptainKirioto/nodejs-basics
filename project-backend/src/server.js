@@ -5,7 +5,8 @@ import contactsRouter from './routers/contacts.js';
 import authRouter from './routers/auth.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
-import { logger } from './middlewares/logger.js';
+import cookieParser from 'cookie-parser';
+// import { logger } from './middlewares/logger.js';
 
 export const startServer = () => {
   // ---- Creating Web-Server ---- //
@@ -18,6 +19,7 @@ export const startServer = () => {
 
   app.use(cors());
   app.use(express.json());
+  app.use(cookieParser());
 
   // Якщо прийде будь-який запит, що починається з /contacts, шукай обробник цього запиту у об'єкті contactsRouter
   app.use('/auth', authRouter);
@@ -27,7 +29,7 @@ export const startServer = () => {
 
   app.use(errorHandler); // when error occured
 
-  const port = Number(env('PORT', 300));
+  const port = Number(env('PORT', 3000));
 
   app.listen(port, () => console.log(`Server running on ${port} PORT`));
 };

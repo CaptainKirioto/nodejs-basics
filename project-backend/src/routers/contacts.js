@@ -5,10 +5,13 @@ import validateBody from '../utils/validateBody.js';
 import { contactsAddSchema } from '../validation/contacts.js';
 import { contactsUpdateSchema } from '../validation/contacts.js';
 import { isValidId } from '../middlewares/isValidId.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 const contactsRouter = Router();
 
 // ---- Creating Routes ---- //
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get('/', ctrlWrapper(contactsControllers.getContactsController));
 

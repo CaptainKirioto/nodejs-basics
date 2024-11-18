@@ -19,6 +19,9 @@ export const getContacts = async ({
   if (filter.maxBirthYear) {
     query.where('birthYear').lte(filter.maxBirthYear);
   }
+  if (filter.userId) {
+    query.where('userId').equals(filter.userId);
+  }
 
   const data = await query;
 
