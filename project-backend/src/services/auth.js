@@ -7,6 +7,7 @@ import {
   accessTokenLifetime,
   refreshTokenLifetime,
 } from '../constants/users.js';
+import { sendEmail } from '../utils/sendEmail.js';
 
 const createSession = () => {
   const accessToken = randomBytes(30).toString('base64');
@@ -28,7 +29,12 @@ export const register = async (payload) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  return UserCollection.create({ ...payload, password: hashPassword });
+  const newUser = await UserCollection.create({
+    ...payload,
+    password: hashPassword,
+  });
+
+  return newUser;
 };
 
 export const login = async ({ email, password }) => {
@@ -36,6 +42,11 @@ export const login = async ({ email, password }) => {
   if (!user) {
     throw createHttpError(401, 'Email or password is invalid');
   }
+
+  if (!user.verify) {
+    throw createHttpError(401, 'Email is not verified');
+  }
+
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
     throw createHttpError(401, 'Email or password is invalid');
