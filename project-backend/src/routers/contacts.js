@@ -6,6 +6,7 @@ import { contactsAddSchema } from '../validation/contacts.js';
 import { contactsUpdateSchema } from '../validation/contacts.js';
 import { isValidId } from '../middlewares/isValidId.js';
 import { authenticate } from '../middlewares/authenticate.js';
+import { upload } from '../middlewares/upload.js';
 
 const contactsRouter = Router();
 
@@ -29,8 +30,11 @@ contactsRouter.get(
 // next(error)}
 // });
 
+// на випадок, якщо файли у декількох полях -- "upload.fields([{name: "poster", maxCount: 10}, {name: "subposter", maxCount: 3}])"
+// на випадок, якщо файлів більше одного -- "upload.array("poster", 10)" -- очікуй в полі постер масив до 10 файлів
 contactsRouter.post(
   '/',
+  upload.single('poster'), // очікуй 1 файл в полі постер, все інше -- текст
   validateBody(contactsAddSchema),
   ctrlWrapper(contactsControllers.addContactController),
 );
