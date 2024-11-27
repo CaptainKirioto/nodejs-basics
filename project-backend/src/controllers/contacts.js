@@ -1,10 +1,15 @@
 import * as contactServices from '../services/contacts.js';
 import createHttpError from 'http-errors';
-import { contactsAddSchema } from '../validation/contacts.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { sortByList } from '../db/models/Contact.js';
 import { parseContactFilterParams } from '../utils/parseContactFilterParams.js';
+import { saveFileToUploadDir } from '../utils/saveFiletoUploadDir.js';
+import * as path from 'node:path';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { env } from '../utils/env.js';
+
+const enableCloudinary = env('ENABLE_CLOUDINARY');
 
 export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -54,16 +59,26 @@ export const getContactByIdController = async (req, res) => {
 };
 
 export const addContactController = async (req, res) => {
-  console.log(req.body);
-  console.log(req.file);
-
-  // const { _id: userId } = req.user;
-  // const data = await contactServices.addContact({ ...req.body, userId });
-  // res.status(201).json({
-  //   status: 201,
-  //   message: 'Contact successfully added',
-  //   data,
-  // });
+  const { _id: userId } = req.user;
+  let poster = null;
+  if (req.file) {
+    if (enableCloudinary === 'true') {
+      poster = await saveFileToCloudinary(req.file, 'posters');
+    } else {
+      await saveFileToUploadDir(req.file);
+      poster = path.join('uploads', req.file.filename);
+    }
+  }
+  const data = await contactServices.addContact({
+    ...req.body,
+    poster,
+    userId,
+  });
+  res.status(201).json({
+    status: 201,
+    message: 'Contact successfully added',
+    data,
+  });
 };
 
 export const upsertContactController = async (req, res) => {

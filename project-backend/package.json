@@ -23,6 +23,7 @@
     "@elasticemail/elasticemail-client": "^4.0.23",
     "add": "^2.0.6",
     "bcrypt": "^5.1.1",
+    "cloudinary": "^2.5.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "cross-spawn": "^7.0.5",

@@ -33,6 +33,9 @@ const contactSchema = new Schema(
       min: 1700,
       required: true,
     },
+    poster: {
+      type: String,
+    },
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'user',

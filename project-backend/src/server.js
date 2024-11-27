@@ -17,13 +17,13 @@ export const startServer = () => {
 
   const app = express();
 
-  // app.use(logger);
-
   // ---- Creating Middleware ---- //
 
   app.use(cors());
   app.use(express.json());
   app.use(cookieParser());
+  app.use(express.static('uploads'));
+  // app.use(logger);
 
   // Якщо прийде будь-який запит, що починається з /contacts, шукай обробник цього запиту у об'єкті contactsRouter
   app.use('/auth', authRouter);
